@@ -42,12 +42,11 @@ class Post(db.Model):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
 
-    def __init__(self, title, content, user_id, date_created, id = ''):
+    def __init__(self, title, content, user_id, id = ''):
         self.id = self.set_id()
         self.title = title
         self.content = content
         self.user_id = user_id
-        self.date_created = date_created
 
     def set_id(self):
         return str(uuid.uuid4())
