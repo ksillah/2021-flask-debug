@@ -8,7 +8,6 @@ site = Blueprint('site', __name__, template_folder='site_templates')
 @site.route('/')
 def home():
     posts = Post.query.all()
-    print(posts)
     return render_template('index.html', posts=posts)
 
 @site.route('/profile')
