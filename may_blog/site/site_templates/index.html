@@ -28,7 +28,7 @@
 {% if current_user.is_authenticated %}
     <h2>Hello there {{ current_user.email }}</h2>
     <div class="container">
-    {% for post in posts %}
+    {% for post in post %}
         <div class="card" style="width: 18rem;">
             <div class="card-body">
               <h5 class="card-title">{{ post.tile }}</h5>
@@ -38,7 +38,7 @@
         </div>
     {% endfor %}
     </div>
-    {% else %}
+{% else %}
     <h2>Log in to see/make posts!</h2>
 
 {% endif %}

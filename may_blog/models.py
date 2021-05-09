@@ -28,9 +28,9 @@ class User(db.Model, UserMixin):
     def set_id(self):
         return str(uuid.uuid4())
 
-        def set_password(self, password):
-            self.pw_hash = generate_password_hash(password)
-            return self.pw_hash
+    def set_password(self, password):
+        self.pw_hash = generate_password_hash(password)
+        return self.pw_hash
     
     def __repr__(self):
         return f'{self.username} has been created with {self.email}'
@@ -42,11 +42,12 @@ class Post(db.Model):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
 
-    def __init__(self, title, content, user_id, id = ''):
+    def __init__(self, title, content, user_id, date_created, id = ''):
         self.id = self.set_id()
         self.title = title
         self.content = content
         self.user_id = user_id
+        self.date_created = date_created
 
     def set_id(self):
         return str(uuid.uuid4())

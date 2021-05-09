@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from may_blog.forms import UserLoginForm, UserInfoForm
-from may_blog.models import User, check_password_hash
+from may_blog.models import User, check_password_hash, db
 
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -30,21 +30,23 @@ def signup():
 @auth.route('/signin', methods = ['GET', 'POST'])
 def signin():
     form = UserLoginForm()
-    if request.method =='POST' and form.validate_on_submit():
-        email = form.email
-        password = form.password.data
-        print(email, password)
-        
-        logged_user = User.query.filter(User.email == email).first()
+    try:
+        if request.method =='POST' and form.validate_on_submit():
+            email = form.email.data
+            password = form.password.data
+            print(email, password)
+            
+            logged_user = User.query.filter(User.email == email).first()
 
-        if logged_user and check_password_hash(logged_user.password, password):
-            login_user(logged_user)
-            flash('You were successfully logged in: Via Email/Password', 'auth-success')
-            return redirect(url_for('site.home'))
-        else:
-            flash('Your Email/Password is incorrect', 'auth-failed')
-            return redirect(url_for('auth.signin'))
-
+            if logged_user and check_password_hash(logged_user.password, password):
+                login_user(logged_user)
+                flash('You were successfully logged in: Via Email/Password', 'auth-success')
+                return redirect(url_for('site.home'))
+            else:
+                flash('Your Email/Password is incorrect', 'auth-failed')
+                return redirect(url_for('auth.signin'))
+    except:
+        raise Exception('Invalid Form Data: Please check your form.')
     return render_template('signin.html', form = form)
 
 @auth.route('/logout')
