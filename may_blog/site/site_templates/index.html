@@ -28,17 +28,23 @@
 {% if current_user.is_authenticated %}
     <h2>Hello there {{ current_user.email }}</h2>
     <div class="container">
-        {% for post in posts %}
-            {% if post.user_id == current_user.id %}
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">By: {{ current_user.username }}</h6>
-                    <p class="card-text">{{ post.content }}</p>
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
+        
+            {% for post in posts %}
+                {% set user_id = post.user_id %}
+                {% for user in users %}
+                    {% set username = '' %}
+                    {% if post.user_id == user.id  %}
+                        {% set username = user.username %}
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post.title }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">By: {{ username }}</h6>
+                                <p class="card-text">{{ post.content }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
     </div>
 {% else %}
     <h2>Log in to see/make posts!</h2>

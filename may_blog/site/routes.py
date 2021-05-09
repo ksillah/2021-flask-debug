@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
-from may_blog.models import Post, db
+from may_blog.models import Post, db, User
 from may_blog.forms import BlogPostForm
 
 site = Blueprint('site', __name__, template_folder='site_templates')
@@ -8,7 +8,8 @@ site = Blueprint('site', __name__, template_folder='site_templates')
 @site.route('/')
 def home():
     posts = Post.query.all()
-    return render_template('index.html', posts=posts)
+    users = User.query.all()
+    return render_template('index.html', posts=posts, users=users)
 
 @site.route('/profile')
 @login_required
@@ -18,12 +19,9 @@ def profile():
 @site.route('/createposts', methods=['GET','POST'])
 @login_required
 def createposts():
-    print(current_user.id)
     form = BlogPostForm()
-    print (form.content.data)
     
     if request.method == 'POST' and form.validate():
-        print('here')
         title = form.title.data
         content = form.content.data
         user_id = (current_user.id)
